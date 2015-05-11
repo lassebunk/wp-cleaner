@@ -23,6 +23,10 @@ class AssetCollection {
     return '';
   }
 
+  function transform($source, $relative_path) {
+    return $source;
+  }
+
   function filename() {
     return md5(serialize($this->sources)) . $this->extension();
   }
