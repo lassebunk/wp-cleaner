@@ -12,7 +12,7 @@ class Source {
     $this->filters = $filters;
   }
 
-  function content( $filters = array() ) {
+  function content() {
     if (file_exists($this->path)) {
       $content = file_get_contents($this->path);
     } else {
