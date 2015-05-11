@@ -25,10 +25,13 @@ class Cleaner {
   }
 
   function activate() {
-    if ( !file_exists( $this->assets_path ) )
-      mkdir( $this->assets_path, 0755, true );
-    if ( !file_exists( $this->cache_path ) )
-      mkdir( $this->cache_path, 0755, true );
+    $assets_path = self::asset_path();
+    if ( !file_exists( $assets_path ) )
+      mkdir( $assets_path, 0755, true );
+
+    $cache_path = self::cache_path();
+    if ( !file_exists( $cache_path ) )
+      mkdir( $cache_path, 0755, true );
   }
 
   function clear() {
