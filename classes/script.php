@@ -1,6 +1,6 @@
 <?php
 namespace Cleaner;
-class Scripts extends AssetCollection {
+class Script extends Asset {
   function extension() {
     return '.js';
   }

@@ -9,11 +9,15 @@
  * License: GPLv2 or later
  */
 
-require_once( dirname(__FILE__) . '/classes/asset_collection.php' );
 require_once( dirname(__FILE__) . '/classes/cleaner.php' );
-require_once( dirname(__FILE__) . '/classes/scripts.php' );
-require_once( dirname(__FILE__) . '/classes/styles.php' );
+require_once( dirname(__FILE__) . '/classes/asset.php' );
+require_once( dirname(__FILE__) . '/classes/source.php' );
+require_once( dirname(__FILE__) . '/classes/script.php' );
+require_once( dirname(__FILE__) . '/classes/stylesheet.php' );
+require_once( dirname(__FILE__) . '/classes/filter.php' );
+require_once( dirname(__FILE__) . '/classes/filters/url_filter.php' );
 
 $cleaner = new Cleaner;
+$cleaner->clear();
 
 register_activation_hook( __FILE__, array( $cleaner, 'activate' ) );

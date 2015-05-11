@@ -1,11 +1,23 @@
 <?php
 class Cleaner {
-  var $styles;
-  var $scripts;
+  var $stylesheet;
+  var $script;
+
+  static function asset_path($filename = '') {
+    return WP_CONTENT_DIR . '/assets/' . $filename;
+  }
+
+  static function asset_url($filename) {
+    return content_url( 'assets/' . $filename );
+  }
+
+  static function cache_path($filename = '') {
+    return self::asset_path('cache/' . $filename);
+  }
 
   function __construct() {
-    $this->styles = new Cleaner\Styles;
-    $this->scripts = new Cleaner\Scripts;
+    $this->stylesheet = new Cleaner\Stylesheet;
+    $this->script = new Cleaner\Script;
 
     add_filter( 'style_loader_src', array( $this, 'style_src' ), 10000, 2 );
     add_filter( 'script_loader_src', array( $this, 'script_src' ) );
@@ -13,34 +25,35 @@ class Cleaner {
   }
 
   function activate() {
-    if ( !file_exists( asset_path() ) )
-      mkdir( asset_path(), 0755, true );
-    if ( !file_exists( cache_path() ) )
-      mkdir( cache_path(), 0755, true );
+    if ( !file_exists( $this->assets_path ) )
+      mkdir( $this->assets_path, 0755, true );
+    if ( !file_exists( $this->cache_path ) )
+      mkdir( $this->cache_path, 0755, true );
+  }
+
+  function clear() {
+    exec( 'rm ' . self::cache_path('*') );
+    exec( 'rm ' . self::asset_path('*') );
   }
 
   function head($content) {
-    global $scripts, $styles;
-
     $assets = array(
-      '<link rel="stylesheet" type="text/css" href="' . $this->styles->url() . '" />',
-      '<script type="text/javascript" src="' . $this->scripts->url() . '"></script>'
+      '<link rel="stylesheet" type="text/css" href="' . $this->stylesheet->url() . '" />',
+      '<script type="text/javascript" src="' . $this->script->url() . '"></script>'
     );
 
     echo join("\n", $assets) . "\n";
   }
 
-  function style_src($url, $handle) {
-    global $cleaner;
-    if ( $cleaner->styles->should_keep( $handle ) ) {
+  function style_src( $url, $handle ) {
+    if ( $this->stylesheet->should_keep( $handle ) ) {
       return $url;
     } else {
-      $cleaner->styles->add( $url );
+      $this->stylesheet->add( $url );
     }
   }
 
-  function script_src($url) {
-    global $cleaner;
-    $cleaner->scripts->add( $url );
+  function script_src( $url ) {
+    $this->script->add( $url );
   }
 }
