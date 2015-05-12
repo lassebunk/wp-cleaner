@@ -24,6 +24,15 @@ class Asset {
     return '';
   }
 
+  function render_html() {
+  }
+
+  function html() {
+    if ( !empty( $this->sources ) ) {
+      return $this->render_html();
+    }
+  }
+
   function filename() {
     return md5(serialize($this->sources)) . $this->extension();
   }

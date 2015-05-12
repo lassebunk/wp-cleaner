@@ -19,4 +19,8 @@ class Stylesheet extends Asset {
   function extension() {
     return '.css';
   }
+
+  function render_html() {
+    return '<link rel="stylesheet" type="text/css" href="' . $this->url() . '" />';
+  }
 }

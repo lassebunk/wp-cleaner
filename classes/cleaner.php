@@ -1,7 +1,8 @@
 <?php
 class Cleaner {
   var $stylesheet;
-  var $script;
+  var $header_script;
+  var $footer_script;
 
   static function asset_path($filename = '') {
     return WP_CONTENT_DIR . '/assets/' . $filename;
@@ -17,11 +18,13 @@ class Cleaner {
 
   function __construct() {
     $this->stylesheet = new Cleaner\Stylesheet;
-    $this->script = new Cleaner\Script;
+    $this->header_script = new Cleaner\Script( array( 'position' => 'head' ) );
+    $this->footer_script = new Cleaner\Script( array( 'position' => 'footer' ) );
 
-    add_filter( 'style_loader_src', array( $this, 'style_src' ), 10000, 2 );
-    add_filter( 'script_loader_src', array( $this, 'script_src' ) );
-    add_action( 'wp_head', array( $this, 'head' ) );
+    add_filter( 'style_loader_src',        array( $this, 'style_src' ), 10000, 2 );
+    add_filter( 'script_loader_src',       array( $this, 'script_src' ), 10000, 2 );
+    add_action( 'wp_head',                 array( $this, 'head' ) );
+    add_action( 'wp_print_footer_scripts', array( $this, 'footer' ) );
   }
 
   function activate() {
@@ -40,12 +43,24 @@ class Cleaner {
   }
 
   function head($content) {
-    $assets = array(
-      '<link rel="stylesheet" type="text/css" href="' . $this->stylesheet->url() . '" />',
-      '<script type="text/javascript" src="' . $this->script->url() . '"></script>'
-    );
+    $this->print_assets( array(
+      $this->header_script,
+      $this->stylesheet
+    ));
+  }
 
-    echo join("\n", $assets) . "\n";
+  function footer($content) {
+    $this->print_assets( array(
+      $this->footer_script
+    ));
+  }
+
+  function print_assets( $assets ) {
+    $lines = array_map( function($asset) {
+      return $asset->html();
+    }, $assets );
+    $html = join("\n", array_filter( $lines ) );
+    if ( $html ) echo $html . "\n";
   }
 
   function style_src( $url, $handle ) {
@@ -56,7 +71,18 @@ class Cleaner {
     }
   }
 
-  function script_src( $url ) {
-    $this->script->add( $url );
+  function script_src( $url, $handle ) {
+    global $wp_scripts;
+
+    if ( isset( $wp_scripts->registered[$handle] ) ) {
+      $options = $wp_scripts->registered[$handle]->extra;
+      if ( !isset( $options['group'] ) || $options['group'] == 0 ) {
+        $this->header_script->add( $url );
+      } elseif ( $options['group'] == 1 ) {
+        $this->footer_script->add( $url );
+      }
+    } else {
+      return $url;
+    }
   }
 }
