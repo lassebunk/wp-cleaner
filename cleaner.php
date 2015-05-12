@@ -18,6 +18,5 @@ require_once( dirname(__FILE__) . '/classes/filters/url_filter.php' );
 require_once( dirname(__FILE__) . '/classes/source.php' );
 
 $cleaner = new Cleaner;
-$cleaner->clear();
 
 register_activation_hook( __FILE__, array( $cleaner, 'activate' ) );
