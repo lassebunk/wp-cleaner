@@ -21,10 +21,12 @@ class Cleaner {
     $this->header_script = new Cleaner\Script( array( 'position' => 'head' ) );
     $this->footer_script = new Cleaner\Script( array( 'position' => 'footer' ) );
 
-    add_filter( 'style_loader_src',        array( $this, 'style_src' ), 10000, 2 );
-    add_filter( 'script_loader_src',       array( $this, 'script_src' ), 10000, 2 );
-    add_action( 'wp_head',                 array( $this, 'head' ) );
-    add_action( 'wp_print_footer_scripts', array( $this, 'footer' ) );
+    if ( !is_admin() ) {
+      add_filter( 'style_loader_src',        array( $this, 'style_src' ), 10000, 2 );
+      add_filter( 'script_loader_src',       array( $this, 'script_src' ), 10000, 2 );
+      add_action( 'wp_head',                 array( $this, 'head' ), 9 );
+      add_action( 'wp_print_footer_scripts', array( $this, 'footer' ) );
+    }
   }
 
   function activate() {
