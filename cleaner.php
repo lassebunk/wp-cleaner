@@ -15,6 +15,7 @@ require_once( dirname(__FILE__) . '/classes/assets/script.php' );
 require_once( dirname(__FILE__) . '/classes/assets/stylesheet.php' );
 require_once( dirname(__FILE__) . '/classes/filter.php' );
 require_once( dirname(__FILE__) . '/classes/filters/url_filter.php' );
+require_once( dirname(__FILE__) . '/classes/filters/jshrink_filter.php' );
 require_once( dirname(__FILE__) . '/classes/source.php' );
 
 $cleaner = new Cleaner;

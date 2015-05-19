@@ -1,6 +1,12 @@
 <?php
 namespace Cleaner;
 class Script extends Asset {
+  function filters() {
+    return array(
+      'Cleaner\JShrinkFilter'
+    );
+  }
+
   function extension() {
     return '.js';
   }
