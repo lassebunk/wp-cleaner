@@ -5,11 +5,11 @@ class Cleaner {
   var $footer_script;
 
   static function asset_path($filename = '') {
-    return WP_CONTENT_DIR . '/assets/' . $filename;
+    return wp_upload_dir()['basedir'] . '/cleaner-assets/' . $filename;
   }
 
   static function asset_url($filename) {
-    return content_url( 'assets/' . $filename );
+    return wp_upload_dir()['baseurl'] . '/cleaner-assets/' . $filename;
   }
 
   static function cache_path($filename = '') {
