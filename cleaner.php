@@ -3,7 +3,7 @@
  * Plugin Name: Cleaner
  * Plugin URI: https://github.com/lassebunk/wp-cleaner
  * Description: Joins assets into a single CSS and JS file.
- * Version: 1.0.0
+ * Version: 0.0.1
  * Author: Lasse Bunk
  * Author URI: https://github.com/lassebunk
  * License: GPLv2 or later
